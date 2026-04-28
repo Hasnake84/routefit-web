@@ -20,8 +20,8 @@ export default function Home() {
     return n === 4 ? 87 : n === 3 ? 78 : n === 2 ? 62 : n === 1 ? 40 : 0
   }, [from, to, timeWindow, note])
 
-  const goToDashboard = () => { setSlide('left'); setView('dashboard') }
-  const goToSubmit    = () => { setSlide('right'); setView('submit') }
+  const goToDashboard = () => { setSlide('right'); setView('dashboard') }
+  const goToSubmit    = () => { setSlide('left');  setView('submit') }
 
   const handleSubmit = async () => {
     setError('')
