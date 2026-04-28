@@ -55,15 +55,34 @@ export default function Home() {
 
         {/* ── Submit form ───────────────────────────────────────────────── */}
         {view === 'submit' && (
-          <section className="flex min-h-screen items-center justify-center px-4 py-6">
+          <section className="flex min-h-screen items-center justify-center px-4 py-10">
+            <div className="w-full space-y-6">
+
+              {/* Hero */}
+              <div className="space-y-4">
+                <div className="inline-flex items-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs text-cyan-300">
+                  Built for food delivery
+                </div>
+                <h1 className="text-4xl font-semibold tracking-tight text-white">
+                  Capture driver intent for DoorDash, Grubhub, and Uber Eats.
+                </h1>
+                <p className="max-w-sm text-sm leading-6 text-zinc-300">
+                  RouteFit lets delivery drivers submit where they are headed, so platforms can match better routes, reduce dead miles, and improve offer quality.
+                </p>
+                <p className="text-xs uppercase tracking-[0.2em] text-zinc-500">
+                  Built first for DD, GH, and UE drivers.
+                </p>
+              </div>
+
+              {/* Form card */}
             <div className="w-full rounded-[2rem] border border-white/10 bg-white/6 p-5 backdrop-blur-xl">
               <div className="flex justify-between text-xs text-zinc-400">
                 <span>RouteFit</span>
                 <span>Intent submission</span>
               </div>
-              <h1 className="mt-3 text-3xl font-semibold">Where are you headed?</h1>
+              <h2 className="mt-3 text-2xl font-semibold">Where are you headed?</h2>
               <p className="mt-2 text-sm text-zinc-300">
-                Share the route. RouteFit estimates destination intent and confidence.
+                Share your route. RouteFit estimates destination intent and confidence.
               </p>
 
               <div className="mt-5 space-y-3">
@@ -124,6 +143,7 @@ export default function Home() {
                 {loading ? 'Submitting…' : 'Submit Intent'}
               </button>
               <p className="mt-2 text-center text-xs text-zinc-500">Review your route before sending</p>
+            </div>
             </div>
           </section>
         )}
