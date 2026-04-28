@@ -1,65 +1,86 @@
-import Image from "next/image";
+'use client'
+import { useMemo, useState } from 'react'
+
+type View = 'submit' | 'dashboard'
+type Slide = 'left' | 'right'
 
 export default function Home() {
+  const [view, setView] = useState<View>('submit')
+  const [slide, setSlide] = useState<Slide>('left')
+  const [from, setFrom] = useState('')
+  const [to, setTo] = useState('')
+  const [timeWindow, setTimeWindow] = useState('')
+  const [note, setNote] = useState('')
+
+  const confidence = useMemo(() => {
+    const n = [from, to, timeWindow].filter(Boolean).length
+    return n === 3 ? 87 : n === 2 ? 78 : n === 1 ? 62 : 0
+  }, [from, to, timeWindow])
+
+  const goToDashboard = () => { setSlide('left'); setView('dashboard') }
+  const goToSubmit = () => { setSlide('right'); setView('submit') }
+  const screenClass = view === 'submit' ? (slide === 'left' ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0') : (slide === 'left' ? '-translate-x-full opacity-0' : 'translate-x-0 opacity-100')
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+    <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,#143a5b_0%,#04111f_45%,#02070d_100%)] text-white">
+      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.04),transparent_30%,transparent_70%,rgba(255,255,255,0.02))]" />
+      <div className={`relative mx-auto min-h-screen w-full max-w-md transition-all duration-300 ease-out ${screenClass}`}>
+        {view === 'submit' ? (
+          <section className="flex min-h-screen items-center justify-center px-4 py-6">
+            <div className="w-full rounded-[2rem] border border-white/10 bg-white/6 p-5 backdrop-blur-xl">
+              <div className="flex justify-between text-xs text-zinc-400"><span>RouteFit</span><span>Intent submission</span></div>
+              <h1 className="mt-3 text-3xl font-semibold">Where are you headed?</h1>
+              <p className="mt-2 text-sm text-zinc-300">Share the route. RouteFit estimates destination intent and confidence.</p>
+              <div className="mt-5 space-y-3">
+                <input value={from} onChange={e=>setFrom(e.target.value)} placeholder="Starting location" className="w-full rounded-2xl border border-white/10 bg-[#081423] px-4 py-3.5 text-sm outline-none placeholder:text-zinc-500" />
+                <input value={to} onChange={e=>setTo(e.target.value)} placeholder="Destination" className="w-full rounded-2xl border border-white/10 bg-[#081423] px-4 py-3.5 text-sm outline-none placeholder:text-zinc-500" />
+                <input value={timeWindow} onChange={e=>setTimeWindow(e.target.value)} placeholder="Time window, optional" className="w-full rounded-2xl border border-white/10 bg-[#081423] px-4 py-3.5 text-sm outline-none placeholder:text-zinc-500" />
+                <textarea value={note} onChange={e=>setNote(e.target.value)} placeholder="Note, optional" rows={3} className="w-full resize-none rounded-2xl border border-white/10 bg-[#081423] px-4 py-3.5 text-sm outline-none placeholder:text-zinc-500" />
+              </div>
+              <div className="mt-4 rounded-2xl border border-cyan-400/15 bg-cyan-400/8 p-4">
+                <div className="flex justify-between"><p className="text-xs uppercase tracking-[0.2em] text-cyan-300/80">Preview</p><p className="text-sm font-medium text-cyan-300">Estimating route fit</p></div>
+                <div className="mt-3 h-2 w-full rounded-full bg-white/10"><div className="h-full rounded-full bg-cyan-300" style={{ width: `${confidence}%` }} /></div>
+                <p className="mt-2 text-sm text-zinc-300">Starting location, destination, and time window improve matching quality.</p>
+              </div>
+              <button onClick={goToDashboard} className="mt-5 w-full rounded-2xl bg-cyan-300 py-3.5 text-sm font-semibold text-[#04111f]">Submit Intent</button>
+            </div>
+          </section>
+        ) : null}
+            {view === 'dashboard' ? (
+          <section className="flex min-h-screen items-center justify-center px-4 py-6">
+            <div className="w-full space-y-4">
+              <div className="rounded-[2rem] border border-white/10 bg-white/6 p-5 backdrop-blur-xl">
+                <p className="text-xs uppercase tracking-[0.2em] text-cyan-300/80">RouteFit</p>
+                <h1 className="mt-2 text-3xl font-semibold">Intent submitted</h1>
+                <p className="mt-2 text-sm text-zinc-300">Matching your route and estimating confidence.</p>
+                <div className="mt-5 rounded-3xl border border-white/10 bg-[#081423] p-4 space-y-2 text-sm">
+                  <p><span className="text-zinc-400">From:</span> {from || 'Not set'}</p>
+                  <p><span className="text-zinc-400">To:</span> {to || 'Not set'}</p>
+                  <p><span className="text-zinc-400">Time:</span> {timeWindow || 'Anytime'}</p>
+                  {note ? <p><span className="text-zinc-400">Note:</span> {note}</p> : null}
+                </div>
+                <div className="mt-4 rounded-2xl border border-cyan-400/15 bg-cyan-400/8 p-4">
+                  <div className="flex justify-between"><p className="text-xs uppercase tracking-[0.2em] text-cyan-300/80">Match preview</p><p className="text-sm font-medium text-cyan-300">{confidence || 78}%</p></div>
+                  <div className="mt-3 h-2 w-full rounded-full bg-white/10"><p className="text-sm font-medium text-cyan-300">Match preview</p></div>
+                  <p className="mt-2 text-sm text-zinc-300">Likely destination area and route fit preview.</p>
+                </div>
+                <div className="mt-5 grid grid-cols-2 gap-3">
+                  <button onClick={goToSubmit} className="rounded-2xl border border-white/10 bg-white/5 py-3 text-sm font-medium">Edit</button>
+                  <button onClick={() => {}} className="rounded-2xl bg-cyan-300 py-3 text-sm font-semibold text-[#04111f]">Dashboard</button>
+                </div>
+              </div>
+              <div className="rounded-[2rem] border border-white/10 bg-white/6 p-4 backdrop-blur-xl">
+                <div className="flex justify-between text-xs text-zinc-400"><span>Platform dashboard</span><span>All routes</span></div>
+                <div className="mt-4 grid grid-cols-2 gap-3">
+                  <div className="rounded-3xl border border-white/10 bg-white/5 p-4"><p className="text-xs text-zinc-400">Today</p><p className="mt-2 text-2xl font-semibold">128</p><p className="text-sm text-zinc-300">submissions</p></div>
+                  <div className="rounded-3xl border border-white/10 bg-white/5 p-4"><p className="text-xs text-zinc-400">Avg confidence</p><p className="mt-2 text-2xl font-semibold">76%</p><p className="text-sm text-zinc-300">signal quality</p></div>
+                </div>
+              </div>
+            </div>
+          </section>
+        ) : null}
+      </div>
+    </main>
+  )
 }
+
