@@ -32,8 +32,6 @@ export async function POST(req: Request) {
       confidenceDraft,
       createdAt:      serverTimestamp(),
       status:         'new',
-      source:         'web',
-      appVersion:     'v1',
     })
 
     return NextResponse.json({ success: true })
