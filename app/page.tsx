@@ -2,11 +2,9 @@
 import { useMemo, useState } from 'react'
 
 type View = 'submit' | 'dashboard'
-type Slide = 'left' | 'right'
 
 export default function Home() {
   const [view, setView]           = useState<View>('submit')
-  const [slide, setSlide]         = useState<Slide>('left')
   const [from, setFrom]           = useState('')
   const [to, setTo]               = useState('')
   const [timeWindow, setTimeWindow] = useState('')
@@ -20,8 +18,8 @@ export default function Home() {
     return n === 4 ? 87 : n === 3 ? 78 : n === 2 ? 62 : n === 1 ? 40 : 0
   }, [from, to, timeWindow, note])
 
-  const goToDashboard = () => { setSlide('right'); setView('dashboard') }
-  const goToSubmit    = () => { setSlide('left');  setView('submit') }
+  const goToDashboard = () => setView('dashboard')
+  const goToSubmit    = () => setView('submit')
 
   const handleSubmit = async () => {
     setError('')
@@ -49,15 +47,11 @@ export default function Home() {
     }
   }
 
-  const screenClass = view === 'submit'
-    ? (slide === 'left'  ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0')
-    : (slide === 'left'  ? '-translate-x-full opacity-0' : 'translate-x-0 opacity-100')
-
   return (
     <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,#143a5b_0%,#04111f_45%,#02070d_100%)] text-white">
       <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.04),transparent_30%,transparent_70%,rgba(255,255,255,0.02))]" />
 
-      <div className={`relative mx-auto min-h-screen w-full max-w-md transition-all duration-300 ease-out ${screenClass}`}>
+      <div className="relative mx-auto min-h-screen w-full max-w-md">
 
         {/* ── Submit form ───────────────────────────────────────────────── */}
         {view === 'submit' && (
